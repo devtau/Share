@@ -2,6 +2,8 @@ package com.devtau.share;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 import java.io.File;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,18 +61,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareFileShare(MenuItem menuItemShare, String fileType, Uri fileUri) {
-        Intent shareImageIntent = new Intent(Intent.ACTION_SEND);
-        shareImageIntent.setType(fileType);
-        if (shareImageIntent.resolveActivity(getPackageManager()) != null) {
+        Intent shareFileIntent = new Intent(Intent.ACTION_SEND);
+        shareFileIntent.setType(fileType);
+        List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(shareFileIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        if (resInfoList.size() > 0) {
             //блок, не влияющий ни на что
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                shareImageIntent.setTypeAndNormalize(fileType);
-                shareImageIntent.setClipData(new ClipData(null, new String[]{fileType}, new ClipData.Item(fileUri)));
+                shareFileIntent.setTypeAndNormalize(fileType);
+                shareFileIntent.setClipData(new ClipData(null, new String[]{fileType}, new ClipData.Item(fileUri)));
             }
-            shareImageIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-            shareImageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            shareFileIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             ShareActionProvider providerShareImage = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItemShare);
-            providerShareImage.setShareIntent(shareImageIntent);
+            providerShareImage.setShareIntent(shareFileIntent);
+
+            //костыльный блок для шаринга в вк
+            for (ResolveInfo resolveInfo: resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                grantUriPermission(packageName, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
         } else {
             Log.e(LOG_TAG, "prepareFileShare no activity for share");
         }
