@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Share</string>
+    <string name="share">Поделиться</string>
+    <string name="share_image">Поделиться картинкой</string>
+    <string name="share_video">Поделиться видео</string>
+    <string name="local">Из локальной папки</string>
+    <string name="external">С SD карты</string>
+</resources>
