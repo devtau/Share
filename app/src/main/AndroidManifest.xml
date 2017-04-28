@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ShareEmitterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,5 +29,33 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"/>
         </provider>
+
+        <activity
+            android:name=".ShareReceiverActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="sensorPortrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/*"/>
+                <data android:mimeType="image/*"/>
+                <data android:mimeType="audio/*"/>
+                <data android:mimeType="video/*"/>
+                <data android:mimeType="application/*"/>
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
+
+    <!-- MIME types:
+    text
+    image
+    audio
+    video
+    application
+
+    example
+    message
+    model
+    multipart
+    -->

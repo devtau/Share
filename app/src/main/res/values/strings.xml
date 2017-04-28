@@ -5,4 +5,11 @@
     <string name="share_video">Поделиться видео</string>
     <string name="local">Из локальной папки</string>
     <string name="external">С SD карты</string>
+    <string name="mime_type">MIME type is:</string>
+    <string name="extra_text">Extra text is:</string>
+    <string name="extra_data">Extra data is:</string>
+    <string name="extra_image">Extra image is:</string>
+    <string name="extra_av">Extra audio/video is:</string>
+    <string name="device_info">Device info</string>
+    <string name="no_app_can_receive_this_file">No app can receive this file</string>
 </resources>
